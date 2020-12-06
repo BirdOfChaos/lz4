@@ -1,0 +1,9 @@
+image: gcc
+
+build:
+  stage: build
+  script:
+    - make linux
+  artifacts:
+    paths:
+      - lz4
