@@ -9,22 +9,19 @@ Authors: Laurent Chardon, Ilya Muravyov
 Original lz4x code written and placed in the public domain by Ilya Muravyov
 
 */
-
-#define _CRT_SECURE_NO_WARNINGS
-#define _CRT_DISABLE_PERFCRIT_LOCKS
 #define _FILE_OFFSET_BITS 64
+#if __STDC_VERSION__ >= 200112L
+#  define _ftelli64 ftello
+#else
+#  define _ftelli64 ftell
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <stdbool.h>
 
-#include <localdefs.h>
-
-#ifndef _MSC_VER
-#  define _ftelli64 ftello
-#endif
+#include <lz4_defs.h>
 
 FILE* g_in;
 FILE* g_out;
@@ -36,13 +33,15 @@ void compress(const int max_chain)
 
 
   int n;
+  int comp_len, clbe;
+
   clock_t start;
 
   while ((n=fread(g_buf, 1, BLOCK_SIZE, g_in))>0)
   {
     start=clock();
-    const int comp_len = lz4_compress(g_buf, max_chain, n);
-    fprintf(stderr, "LZ4: %u -> %u in %1.3f sec\n", _ftelli64(g_in),
+    comp_len = lz4_compress(g_buf, max_chain, n);
+    fprintf(stderr, "LZ4: %li -> %u in %1.3f sec\n", _ftelli64(g_in),
       comp_len, (double)(clock()-start)/CLOCKS_PER_SEC);
 
 #ifdef LZ4_LITTLE
@@ -50,19 +49,20 @@ void compress(const int max_chain)
     fwrite(&comp_len, 1, sizeof(comp_len), g_out);
 #else
     /* Big endian */
-    const int clbe = SWAP32(comp_len);
+    clbe = SWAP32(comp_len);
     fwrite(&clbe, 1, sizeof(clbe), g_out);
 #endif
     fwrite(&g_buf[BLOCK_SIZE], 1, comp_len, g_out);
 
-    fprintf(stderr, "%u -> %u\n\r", _ftelli64(g_in), _ftelli64(g_out));
+    fprintf(stderr, "%li -> %li\n\r", _ftelli64(g_in), _ftelli64(g_out));
   }
 }
 
 int decompress()
 {
-  int comp_len;
-  int i;
+  int comp_len, len;
+  int i, p, ip, ip_end, s;
+  int run;
 
   while (fread(&comp_len, 1, sizeof(comp_len), g_in)>0)
   {
@@ -73,17 +73,17 @@ int decompress()
         || fread(&g_buf[BLOCK_SIZE], 1, comp_len, g_in)!=comp_len)
       return -1;
 
-    int p=0;
+    p=0;
 
-    int ip=BLOCK_SIZE;
-    const int ip_end=ip+comp_len;
+    ip=BLOCK_SIZE;
+    ip_end=ip+comp_len;
 
     for (;;)
     {
       const int token=g_buf[ip++];
       if (token>=16)
       {
-        int run=token>>4;
+        run=token>>4;
         if (run==15)
         {
           for (;;)
@@ -111,12 +111,12 @@ int decompress()
           break;
       }
 
-      int s=p-LOAD_16(ip);
+      s=p-LOAD_16(ip);
       ip+=2;
       if (s<0)
         return -1;
 
-      int len=(token&15)+MIN_MATCH;
+      len=(token&15)+MIN_MATCH;
       if (len==(15+MIN_MATCH))
       {
         for (;;)
@@ -164,8 +164,15 @@ int main(int argc, char** argv)
 
   int level=4;
   int i;
+
+  char *in_name;
+
   bool do_decomp=false;
   bool overwrite=false;
+
+  const int magic=LZ4_MAGIC;
+
+  char out_name[FILENAME_MAX];
 
   while (argc>1 && *argv[1]=='-')
   {
@@ -203,10 +210,9 @@ int main(int argc, char** argv)
   if (argc<2)
   {
     fprintf(stderr,
-        "LZ4X - An optimized LZ4 compressor, v1.60\n"
-        "Written and placed in the public domain by Ilya Muravyov\n"
+        "LZ4 compressor/decompressor\n"
         "\n"
-        "Usage: LZ4X [options] infile [outfile]\n"
+        "Usage: LZ4 [options] infile [outfile]\n"
         "\n"
         "Options:\n"
         "  -1  Compress faster\n"
@@ -216,7 +222,7 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  const char *in_name = argv[1];
+  in_name = argv[1];
 
   g_in=fopen(in_name, "rb");
   if (!g_in)
@@ -225,7 +231,6 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  char out_name[FILENAME_MAX];
   if (argc<3)
   {
     strcpy(out_name, in_name);
@@ -303,7 +308,6 @@ int main(int argc, char** argv)
       exit(1);
     }
 
-    const int magic=LZ4_MAGIC;
     fwrite(&magic, 1, sizeof(magic), g_out);
 
     fprintf(stderr, "Compressing %s with LZ4:\n", in_name);

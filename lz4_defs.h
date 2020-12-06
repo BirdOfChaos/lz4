@@ -39,6 +39,13 @@ typedef unsigned int U32;
 #define SWAP32(i) ( (((i) >> 24) & 0x000000FF) | (((i) >>  8) & 0x0000FF00) | \
 	                  (((i) <<  8) & 0x00FF0000) | (((i) << 24) & 0xFF000000) )
 
+
+#if __STDC_VERSION__ > 199900L
+# include <stdbool.h>
+#else
+typedef enum { false, true } bool;
+#endif
+
 /* Declarations */
 
 int lz4_compress(U8 *, const int, int);
