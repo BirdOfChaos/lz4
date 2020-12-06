@@ -1,0 +1,10 @@
+LZ4.TTP
+.C	[-b4 -r6 -d0 -m0 -rs -fm]
+.S	[-m0]
+.L	[NODEBUG]
+=
+C.O
+..\..\LZ4.C
+..\..\LZ4_COMP.C
+..\..\..\LC\LIB\LCM.LIB
+LC.LIB
