@@ -3,5 +3,5 @@ LZ4.TTP
 *.TOS
 *.LZ4
 *.lz4
-do_compression.s
+*.s
 .vscode/settings.json
