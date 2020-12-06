@@ -1,8 +1,8 @@
 lz4
-LZ4.TTP
+*.TTP
 *.TOS
 *.LZ4
 *.lz4
 *.o
 *.s
-.vscode/settings.json
+.vscode
