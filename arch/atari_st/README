@@ -1,0 +1,5 @@
+LZ4.PRJ: Lattice C v5.6 project file to build LZ4.TTP
+
+To build: 
+1 - From "Project" menu, "Load" LZ4.PRJ
+2 - From "Project" menu, select "Make all LZ4"
