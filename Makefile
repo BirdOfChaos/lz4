@@ -9,4 +9,4 @@ linux:
 	gcc -ggdb -std=c90 lz4.c do_compression.c -I. -o lz4
 
 clean:
-	rm -f do_compression.s LZ4X.LZ4 LZ4X.TTP lz4
+	rm -f do_compression.s LZ4.TTP lz4
