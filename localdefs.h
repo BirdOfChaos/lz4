@@ -23,17 +23,10 @@ typedef unsigned int U32;
 #define MIN(a, b) (((a)<(b))?(a):(b))
 #define MAX(a, b) (((a)>(b))?(a):(b))
 
-
 #define LOAD_16(p) *(U16*)&g_buf[p]
 #define LOAD_32(p) *(U32*)&g_buf[p]
 #define STORE_16(p, x) *(U16*)&g_buf[p] = x
-#define COPY_32(d, s) *(U32*)&(g_buf[d]) = LOAD_32(s)
-
-
-/* Change endianness */
-#define SWAP16(i) ((i>>8)|(i<<8)) 
-#define SWAP32(i) ( (((i) >> 24) & 0x000000FF) | (((i) >>  8) & 0x0000FF00) | \
-	                  (((i) <<  8) & 0x00FF0000) | (((i) << 24) & 0xFF000000) )
+#define COPY_32(d, s)  *(U32*)&g_buf[d] = LOAD_32(s)
 
 #define HASH_BITS 12
 #define HASH_SIZE (1<<HASH_BITS)
@@ -41,6 +34,11 @@ typedef unsigned int U32;
 
 #define HASH_32(p) ((LOAD_32(p)*0x9E3779B9)>>(32-HASH_BITS))
 
+/* Change endianness */
+#define SWAP16(i) ((i>>8)|(i<<8)) 
+#define SWAP32(i) ( (((i) >> 24) & 0x000000FF) | (((i) >>  8) & 0x0000FF00) | \
+	                  (((i) <<  8) & 0x00FF0000) | (((i) << 24) & 0xFF000000) )
 
+/* Declarations */
 
 int lz4_compress(U8 *, const int, int);
