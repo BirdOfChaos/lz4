@@ -2,13 +2,30 @@
 
 ### Based on LZ4X v1.60 from Ilya Muravyov
 LZ4X is an LZ4-compatible file compressor which uses optimized string parsing to provide higher compression ratios.  
-[The original code fomr Ilya can be found here](https://github.com/encode84/lz4x)
+[The original code from Ilya can be found here](https://github.com/encode84/lz4x)
 
 ### Description
-The Atari ST version is scaled down and only the regular lz4 algorithm is used, with smaller tables.  
-At the moment, only compression is working and has been tested.  
-Future work includes adapting decompression to the ST, porting the project to C code that can be entirely compiled on the ST and testing on other platforms.
+This is a simplified version in C. It is meant to be simple and easily portable to other platforms. Currently works in little endian and big endian environments.
 
+### TODO
+DONE - Finish porting to C  
+    So that older architectures/compilers pre-dating C++ can generate the binary  
+  
+Separate into compress/decompress library  
+    With a test main program  
+    Will allow for easy integration in other projects  
+  
+Create switch for older architecture  
+    Probably a define at compile time  
+    For size optimization that will reduce memory requirements  
+  
+Optimize for speed on older architectures  
+    Dependency: create switch for older architecture  
+  
+Test on other platforms  
+    Currently supported: x86_64 Linux, m68k Atari ST  
+    Planned: m68k macintosh, m68k amiga, MIPS, SPARC  
+  
 ### License
 The original very permissive "unlicense" has been kept. See [LICENSE](LICENSE)
 
