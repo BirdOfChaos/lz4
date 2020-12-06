@@ -1,8 +1,12 @@
 /*
 
-LZ4X - An optimized LZ4 compressor
+lz4 - utility to compress/decompress files using the LZ4 algorithm
 
-Written and placed in the public domain by Ilya Muravyov
+See accompanying LICENSE file for licensing terms
+
+Authors: Laurent Chardon, Ilya Muravyov
+
+Original lz4x code written and placed in the public domain by Ilya Muravyov
 
 */
 
@@ -37,7 +41,7 @@ void compress(const int max_chain)
   while ((n=fread(g_buf, 1, BLOCK_SIZE, g_in))>0)
   {
     start=clock();
-    const int comp_len = do_compression(g_buf, max_chain, n);
+    const int comp_len = lz4_compress(g_buf, max_chain, n);
     fprintf(stderr, "LZ4: %u -> %u in %1.3f sec\n", _ftelli64(g_in),
       comp_len, (double)(clock()-start)/CLOCKS_PER_SEC);
 

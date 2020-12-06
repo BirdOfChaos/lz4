@@ -1,6 +1,6 @@
 #include <localdefs.h>
 
-int do_compression(U8 *g_buf, const int max_chain, int n)
+int lz4_compress(U8 *g_buf, const int max_chain, int n)
 {
 
   int i;

@@ -43,4 +43,4 @@ typedef unsigned int U32;
 
 
 
-int do_compression(U8 *, const int, int);
+int lz4_compress(U8 *, const int, int);
