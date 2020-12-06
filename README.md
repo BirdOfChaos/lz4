@@ -4,23 +4,24 @@
 A simple lz4 library in C that can do compression and decompression. It is meant to be simple and easily portable to other platforms. Can compress files of memory arrays. Works in little endian and big endian environments.
 
 ## TODO
-### DONE - Finish porting to C  
-    So that older architectures/compilers pre-dating C++ can generate the binary  
+** ~~Finish porting to C~~ **  
+- So that older architectures/compilers pre-dating C++ can generate the binary
+- ** DONE **
   
-### Separate into compress/decompress library  
-    With a test main program  
-    Will allow for easy integration in other projects  
+** Separate into compress/decompress library **
+- With a test main program
+- Will allow for easy integration in other projects
   
-### Create switch for older architecture  
-    Probably a define at compile time  
-    For size optimization that will reduce memory requirements  
+** Create switch for older architecture **
+- Probably a define at compile time
+- For size optimization that will reduce memory requirements
   
-### Optimize for speed on older architectures  
-    Dependency: create switch for older architecture  
+** Optimize for speed on older architectures **
+- Dependency: create switch for older architecture
   
-### Test on other platforms  
-    Currently supported: x86_64 Linux, m68k Atari ST  
-    Planned: m68k macintosh, m68k amiga, MIPS, SPARC  
+** Test on other platforms **
+- Currently supported: x86_64 Linux, m68k Atari ST
+- Planned: m68k macintosh, m68k amiga, MIPS, SPARC
   
 ## License
 The original very permissive "unlicense" has been kept. See [LICENSE](LICENSE)
