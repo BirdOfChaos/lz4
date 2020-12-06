@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 {
 
   int level=4;
-  int i;
+  int i, dummy;
 
   char *in_name;
 
@@ -276,7 +276,7 @@ int main(int argc, char** argv)
   if (do_decomp)
   {
     int magic;
-    fread(&magic, 1, sizeof(magic), g_in);
+    dummy = fread(&magic, 1, sizeof(magic), g_in);
     if (magic!=LZ4_MAGIC)
     {
       fprintf(stderr, "%s: Not in Legacy format\n", in_name);
