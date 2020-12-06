@@ -14,6 +14,7 @@ Written and placed in the public domain by Ilya Muravyov
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 #include <localdefs.h>
 
@@ -37,24 +38,28 @@ void compress(const int max_chain)
   {
     start=clock();
     const int comp_len = do_compression(g_buf, max_chain, n);
-    fprintf(stderr, "LZ4: %lu -> %u in %1.3f sec\n", _ftelli64(g_in),
-      comp_len, double(clock()-start)/CLOCKS_PER_SEC);
+    fprintf(stderr, "LZ4: %u -> %u in %1.3f sec\n", _ftelli64(g_in),
+      comp_len, (double)(clock()-start)/CLOCKS_PER_SEC);
 
-#ifndef mc68000
+#ifdef LZ4_LITTLE
+    /* Little endian */
     fwrite(&comp_len, 1, sizeof(comp_len), g_out);
 #else
+    /* Big endian */
     const int clbe = SWAP32(comp_len);
     fwrite(&clbe, 1, sizeof(clbe), g_out);
 #endif
     fwrite(&g_buf[BLOCK_SIZE], 1, comp_len, g_out);
 
-    fprintf(stderr, "%li -> %li\n\r", _ftelli64(g_in), _ftelli64(g_out));
+    fprintf(stderr, "%u -> %u\n\r", _ftelli64(g_in), _ftelli64(g_out));
   }
 }
 
 int decompress()
 {
   int comp_len;
+  int i;
+
   while (fread(&comp_len, 1, sizeof(comp_len), g_in)>0)
   {
     if (comp_len==LZ4_MAGIC)
@@ -88,10 +93,10 @@ int decompress()
         if ((p+run)>BLOCK_SIZE)
           return -1;
 
-        // wild_copy(p, ip, run);
+        /* wild_copy(p, ip, run); */
         COPY_32(p, ip);
         COPY_32(p+4, ip+4);
-        for (int i=8; i<run; i+=8)
+        for (i=8; i<run; i+=8)
         {
             COPY_32(p+i, ip+i);
             COPY_32(p+4+i, ip+4+i);
@@ -123,10 +128,10 @@ int decompress()
 
       if ((p-s)>=4)
       {
-        // wild_copy(p, s, len);
+        /* wild_copy(p, s, len); */
         COPY_32(p, s);
         COPY_32(p+4, s+4);
-        for (int i=8; i<len; i+=8)
+        for (i=8; i<len; i+=8)
         {
             COPY_32(p+i, s+i);
             COPY_32(p+4+i, s+4+i);
@@ -154,12 +159,13 @@ int main(int argc, char** argv)
 {
 
   int level=4;
+  int i;
   bool do_decomp=false;
   bool overwrite=false;
 
   while (argc>1 && *argv[1]=='-')
   {
-    for (int i=1; argv[1][i]!='\0'; ++i)
+    for (i=1; argv[1][i]!='\0'; ++i)
     {
       switch (argv[1][i])
       {

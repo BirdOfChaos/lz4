@@ -3,10 +3,12 @@
 int do_compression(U8 *g_buf, const int max_chain, int n)
 {
 
+  int i;
+
   static int head[HASH_SIZE];
   static int tail[WINDOW_SIZE];
 
-  for (int i=0; i<HASH_SIZE; ++i)
+  for (i=0; i<HASH_SIZE; ++i)
       head[i]=NIL;
 
   int op=BLOCK_SIZE;
@@ -70,10 +72,10 @@ int do_compression(U8 *g_buf, const int max_chain, int n)
         else
           g_buf[op++]=(run<<4)+nib;
 
-        // wild_copy(op, pp, run);
+        /* wild_copy(op, pp, run); */
         COPY_32(op, pp);
         COPY_32(op+4, pp+4);
-        for (int i=8; i<run; i+=8)
+        for (i=8; i<run; i+=8)
         {
             COPY_32(op+i, pp+i);
             COPY_32(op+4+i, pp+4+i);
@@ -83,9 +85,11 @@ int do_compression(U8 *g_buf, const int max_chain, int n)
       else
         g_buf[op++]=nib;
 
-#ifndef mc68000
+#ifdef LZ4_LITTLE
+      /* Little endian */
       STORE_16(op, dist);
 #else
+      /* Big endian */
       STORE_16(op, SWAP16(dist));
 #endif
       op+=2;
@@ -130,10 +134,10 @@ int do_compression(U8 *g_buf, const int max_chain, int n)
     else
       g_buf[op++]=run<<4;
 
-    // wild_copy(op, pp, run);
+    /* wild_copy(op, pp, run); */
     COPY_32(op, pp);
     COPY_32(op+4, pp+4);
-    for (int i=8; i<run; i+=8)
+    for (i=8; i<run; i+=8)
       {
           COPY_32(op+i, pp+i);
           COPY_32(op+4+i, pp+4+i);
