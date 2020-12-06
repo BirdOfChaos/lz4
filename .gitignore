@@ -2,3 +2,5 @@ lz4
 LZ4.TTP
 *.TOS
 *.LZ4
+*.lz4
+.vscode/settings.json
