@@ -1,4 +1,4 @@
-#include <lz4_defs.h>
+#include <lz4.h>
 int lz4_compress(U8 *g_buf, const int max_chain, int n)
 {
 
@@ -76,7 +76,6 @@ int lz4_compress(U8 *g_buf, const int max_chain, int n)
         else
           g_buf[op++]=(run<<4)+nib;
 
-        /* wild_copy(op, pp, run); */
         COPY_32(op, pp);
         COPY_32(op+4, pp+4);
         for (i=8; i<run; i+=8)
@@ -138,7 +137,6 @@ int lz4_compress(U8 *g_buf, const int max_chain, int n)
     else
       g_buf[op++]=run<<4;
 
-    /* wild_copy(op, pp, run); */
     COPY_32(op, pp);
     COPY_32(op+4, pp+4);
     for (i=8; i<run; i+=8)
