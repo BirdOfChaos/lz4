@@ -6,9 +6,7 @@ A simple lz4 library in C that can do compression and decompression. It is meant
 2021-12-06: apparently the C port was already done years ago for [version 1.10 of LZ4X](https://github.com/nemequ/lz4x)
 
 ## TODO
-  
-**Write a test make target**
-  
+    
 **Create switch for older architecture**
 - Probably a define at compile time
 - For size optimization that will reduce memory requirements
