@@ -7,10 +7,17 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  ubuntu-latest:
+    name: ubuntu-latest
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: make test
+      run: make test
 
+  macos-latest:
+    name: macos-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: make test
