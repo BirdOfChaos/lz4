@@ -5,6 +5,7 @@ LZ4.TTP
 =
 C.O
 ..\..\LZ4.C
-..\..\LZ4_COMP.C
+..\..\LZ4_COMPRESS.C
+..\..\LZ4_DECOMPRESS.C
 ..\..\..\LC\LIB\LCM.LIB
 LC.LIB

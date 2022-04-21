@@ -1,15 +1,13 @@
 # LZ4 compression / decompression
 
 ## Description
-A simple lz4 library in C that can do compression and decompression. It is meant to be simple and easily portable to other platforms. Can compress files of memory arrays. Works in little endian and big endian environments.
+A simple lz4 library in C that can do compression and decompression. It is meant to be simple and easily portable to other platforms. Can compress files or memory arrays. Works in little endian and big endian environments.
 ### Note
 2021-12-06: apparently the C port was already done years ago for [version 1.10 of LZ4X](https://github.com/nemequ/lz4x)
 
 ## TODO
   
-**Separate into compress/decompress library**
-- With a test main program
-- Will allow for easy integration in other projects
+**Write a test make target**
   
 **Create switch for older architecture**
 - Probably a define at compile time
