@@ -32,7 +32,9 @@ jobs:
         install: |
           apt-get update -q -y
           apt-get install -q -y git gcc make
-        run: make test
+        run: |
+          uname -a
+          make test
 
 
   macos-latest:
