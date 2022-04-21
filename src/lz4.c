@@ -19,9 +19,8 @@ Original lz4x code written and placed in the public domain by Ilya Muravyov
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
-#include <lz4.h>
+#include "src/lz4.h"
 
 FILE* g_in;
 FILE* g_out;
@@ -30,19 +29,12 @@ U8 *g_buf=NULL;
 
 void compress(const int max_chain)
 {
-
-
   int n;
   int comp_len, clbe;
 
-  clock_t start;
-
   while ((n=fread(g_buf, 1, BLOCK_SIZE, g_in))>0)
   {
-    start=clock();
     comp_len = lz4_compress(g_buf, max_chain, n);
-    fprintf(stderr, "LZ4: %li -> %u in %1.3f sec\n", _ftelli64(g_in),
-      comp_len, (double)(clock()-start)/CLOCKS_PER_SEC);
 
 #ifdef LZ4_LITTLE
     /* Little endian */
@@ -73,7 +65,6 @@ int decompress()
       return -1;
     
     error=lz4_decompress(g_buf, comp_len, &p);
-    printf("tata: %i\n",p);
     if (error != 0) 
     {
       perror("Error decompressing");
@@ -221,7 +212,7 @@ int main(int argc, char** argv)
       exit(1);
     }
 
-    fprintf(stderr, "Decompressing %s:\n", in_name);
+    fprintf(stderr, "Decompressing %s\n", in_name);
 
     if (decompress()!=0)
     {
@@ -235,19 +226,17 @@ int main(int argc, char** argv)
     if (!g_out)
     {
       perror(out_name);
-      getchar();
       exit(1);
     }
 
     fwrite(&magic, 1, sizeof(magic), g_out);
 
-    fprintf(stderr, "Compressing %s with LZ4:\n", in_name);
+    fprintf(stderr, "Compressing %s\n", in_name);
 
     compress((level<9)?1<<level:WINDOW_SIZE);  
 
   }
 
-  getchar();
   fclose(g_in);
   fclose(g_out);
 

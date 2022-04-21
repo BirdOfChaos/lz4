@@ -1,4 +1,4 @@
-#include <lz4.h>
+#include <src/lz4.h>
 int lz4_compress(U8 *g_buf, const int max_chain, int n)
 {
 
