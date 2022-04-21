@@ -31,6 +31,7 @@ jobs:
         githubToken: ${{ github.token }}
         install: |
           apt-get update -q -y
+          apt-get upgrade -q -y
           apt-get install -q -y git gcc make
         run: |
           uname -a
