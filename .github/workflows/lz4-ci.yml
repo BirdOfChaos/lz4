@@ -27,10 +27,8 @@ jobs:
       id: runcmd
       with:
         arch: aarch64
-        distro: ubuntu-latest
+        distro: ubuntu_latest
         githubToken: ${{ github.token }}
-        # Set an output parameter `uname` for use in subsequent steps
-        name: make test
         run: make test
 
   macos-latest:
