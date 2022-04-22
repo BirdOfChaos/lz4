@@ -1,5 +1,5 @@
 #include <src/lz4.h>
-int lz4_compress(U8 *g_buf, const int max_chain, int n)
+int lz4_compress(U8 *g_buf, const int max_chain, const int uc_length)
 {
 
   int i;
@@ -19,12 +19,12 @@ int lz4_compress(U8 *g_buf, const int max_chain, int n)
   for (i=0; i<HASH_SIZE; ++i)
       head[i]=NIL;
 
-  while (p<n)
+  while (p<uc_length)
   {
     best_len=0;
     dist=0;
 
-    max_match=(n-PADDING_LITERALS)-p;
+    max_match=(uc_length-PADDING_LITERALS)-p;
     if (max_match>=MAX(12-PADDING_LITERALS, MIN_MATCH))
     {
       limit=MAX(p-WINDOW_SIZE, NIL);

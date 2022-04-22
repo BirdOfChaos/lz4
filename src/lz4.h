@@ -48,5 +48,5 @@ typedef enum { false, true } bool;
 
 /* Declarations */
 
-int lz4_compress(U8 *, const int, int);
+int lz4_compress(U8 *, const int, const int);
 int lz4_decompress(U8 *, const int, int *);
